@@ -1,4 +1,3 @@
-import json
 import boto3
 
 dynamodb = boto3.resource('dynamodb')
@@ -22,7 +21,5 @@ def lambda_handler(event, context):
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET"
         },
-        'body': {
-            "count": updated_value
-        }
+        'body': updated_value
     }
