@@ -34,7 +34,7 @@ resource "aws_apigatewayv2_api" "http_api" {
 resource "aws_apigatewayv2_integration" "lambda_integration" {
   api_id                 = aws_apigatewayv2_api.http_api.id
   integration_type       = "AWS_PROXY"
-  integration_uri        = aws_lambda_function.lambda.invoke_arn
+  integration_uri        = aws_lambda_function.counter_function.invoke_arn
   payload_format_version = "2.0"
 }
 
@@ -56,17 +56,17 @@ resource "aws_apigatewayv2_stage" "default_stage" {
 resource "aws_lambda_permission" "apigw_invoke" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.lambda.arn
+  function_name = aws_lambda_function.counter_function.arn
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.http_api.execution_arn}/*/*"
 }
 
-# 8Output the API Endpoint
+# Output the API Endpoint
 output "api_endpoint" {
   value = aws_apigatewayv2_api.http_api.api_endpoint
 }
 
-resource "aws_lambda_function" "lambda" {
+resource "aws_lambda_function" "counter_function" {
   function_name = "CounterProcessor"
   handler       = "lambda_handler.lambda_handler"
   runtime       = "python3.9"
@@ -84,7 +84,7 @@ resource "aws_lambda_function" "lambda" {
 resource "aws_lambda_permission" "apigw" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.lambda.function_name
+  function_name = aws_lambda_function.counter_function.function_name
   principal     = "apigateway.amazonaws.com"
 }
 
