@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = "eu-west-2"
+  region = "eu-west-2"
 }
 
 resource "local_file" "lambda_code" {
@@ -67,11 +67,11 @@ output "api_endpoint" {
 }
 
 resource "aws_lambda_function" "counter_function" {
-  function_name = "CounterProcessor"
-  handler       = "lambda_handler.lambda_handler"
-  runtime       = "python3.9"
-  role          = aws_iam_role.lambda_execution.arn
-  filename      = data.archive_file.lambda_zip.output_path
+  function_name    = "CounterProcessor"
+  handler          = "lambda_handler.lambda_handler"
+  runtime          = "python3.9"
+  role             = aws_iam_role.lambda_execution.arn
+  filename         = data.archive_file.lambda_zip.output_path
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
   environment {
