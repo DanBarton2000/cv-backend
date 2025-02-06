@@ -6,9 +6,9 @@ table = dynamodb.Table('PersonalWebsiteCounter')
 def lambda_handler(event, context):
     response = table.update_item(
         Key={'Count': 0},
-        UpdateExpression='ADD #val :incr',
+        UpdateExpression='SET #val = if_not_exists(#val, :zero) + :incr',
         ExpressionAttributeNames={'#val': 'Value'},
-        ExpressionAttributeValues={':incr': 1},
+        ExpressionAttributeValues={':incr': 1, ':zero': 0},
         ReturnValues='UPDATED_NEW'  # Returns the new counter value
     )
 
