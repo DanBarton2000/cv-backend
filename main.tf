@@ -9,6 +9,16 @@ terraform {
   required_version = ">= 1.2.0"
 }
 
+terraform {
+  backend "s3" {
+    bucket         = "danbartoncv-terraform-state-bucket"
+    key            = "env/prod/terraform.tfstate"
+    region         = "eu-west-2"
+    dynamodb_table = "terraform-lock"
+    encrypt        = true
+  }
+}
+
 provider "aws" {
   region = "eu-west-2"
 }
